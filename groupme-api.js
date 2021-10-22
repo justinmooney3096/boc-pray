@@ -153,6 +153,7 @@ const composePrayerRequestList = (msgList) => {
     })
 
     if (post) {
+        postList.sort();
         postList.push(post);
     }
 
