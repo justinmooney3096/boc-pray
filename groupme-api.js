@@ -129,7 +129,7 @@ const composePrayerRequestList = (msgList) => {
 
         if (text) {
             // Add the author's name to the post
-            text = `${firstName}${type} - ${text}\n\n`;
+            text = `${firstName} ${type} - ${text}\n\n`;
 
             // If text meets the char requirement, append to post
             if ((text.length + post.length) < 1000) {
@@ -159,55 +159,6 @@ const composePrayerRequestList = (msgList) => {
     return postList;
 }
 
-/*
-// Justin
-// Returns a list of posts that mees the character count requirement
-const composePraiseRequestList = (msgList) => {
-    let postList = [];
-    let post = "";
-
-    // Displays prayer list in chronological order
-    msgList = msgList.reverse();
-
-    msgList.map((msg) => {
-        const userName = msg.name;
-        const firstName = userName.split(" ")[0];
-
-        // Split out the first char sequence "/pray " from the user's post
-        let text = msg.text.split("/praise ")[1];
-
-        if (text) {
-            // Add the author's name to the post
-            text = `${firstName} - ${text}\n\n`;
-
-            // If text meets the char requirement, append to post
-            if ((text.length + post.length) < 1000) {
-                post += text;
-            } else {
-                // Add the current post to the list of posts
-                postList.push(post);
-
-                // Split the remainder of the msg into a smaller list
-                let splitMsgList = splitInto1000CharList(text);
-
-                // Cache the last element
-                const lastElement = splitMsgList.pop();
-
-                // Push the remainder into 
-                postList.push(...splitMsgList);
-                post = "";
-                post += lastElement;
-            }
-        }
-    })
-
-    if (post) {
-        postList.push(post);
-    }
-
-    return postList;
-}
-*/
 
 // Split the msg into a list of msg under that is 999 len long
 const splitInto1000CharList = (msg) => {
@@ -256,24 +207,6 @@ const createPost = async (message) => {
     }
 }
 
-
-
-/*
-const postPrayerRequestList = async () => {
-    const myLikeList = await getMyLikeList()
-    const prayList = filterRegexMsgList(myLikeList, prayRegex);
-    const praiseList = filterRegexMsgList(myLikeList, praiseRegex);
-    const praisepraylist = praiseList.concat(prayList)
-    await filterAndPostWeeklyList(praisepraylist); // come back
-}
-*/
-
-/*
-// Returns a list of msg that matches the regex
-const filterRegexMsgList = (msgList, regex) => {
-    return msgList.filter(msg => (msg.text && regex.test(msg.text)))
-}
-*/
 
 // Returns all your bots and their info
 const getBots = async () => {
