@@ -290,6 +290,7 @@ const praiseRegex = /^(\s)*\/praise/;
 const genListRegex = /^(\s)*\/list/;
 const coolRegex = /^(\s)*\/cool/;
 
+exports.praiseRegex = praiseRegex;
 exports.prayRegex = prayRegex;
 exports.coolRegex = coolRegex;
 exports.genListRegex = genListRegex;
