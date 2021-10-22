@@ -20,8 +20,6 @@ const respond = async (req, res) => {
     console.log("Request: ");
     console.log(request);
     const requestText = request.text;
-    console.log("requestText:");
-    console.log(requestText);
     console.log(`User request: "${requestText}"`);
 
     // If text matches regex
@@ -29,7 +27,9 @@ const respond = async (req, res) => {
       res.writeHead(200);
       // Add a quick delay so group me sends msg to server first instead of bot
       await sleep(1500);
+      console.log("in if requestText");
       if (prayRegex.test(requestText) || praiseRegex.test(requestText)) {
+        console.log("after regex test");
         const msgId = request.id;
         if (!msgId) {
           console.log("Message id is undefined");
