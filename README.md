@@ -84,7 +84,7 @@ GROUP_ID="some_id"
 
 ## Now go test your bot
 
-Go to GroupMe and type, "/pray", "/list", or "/cool" in the group where your bot lives to see it in action.
+Go to GroupMe and type, "/pray", "/praise", "/list", or "/cool" in the group where your bot lives to see it in action.
 
 # Make it your own<a name="pull"></a>
 
