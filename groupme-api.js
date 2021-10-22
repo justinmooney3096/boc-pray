@@ -22,25 +22,6 @@ if (!groupId) {
     console.log("ENV: 'GROUP_ID' is undefined");
 }
 
-// Tell the bot to create a post within its group
-const createPost = async (message) => {
-    console.log(`Creating new post (${message.length}): ${message}`);
-    const postPath = "/v3/bots/post";
-    const destUrl = new URL(postPath, baseUrl);
-
-    const response = await got.post(destUrl, {
-        json: {
-            "bot_id": botID,
-            "text": String(message),
-        },
-    })
-
-    const statusCode = response.statusCode;
-    if (statusCode !== 202) {
-        console.log(`Error creating a post ${statusCode}`);
-    }
-}
-
 // msgId: str
 // The bot uses the owner's credential to like a message with msgId
 const likeMessage = async (msgId) => {
@@ -56,7 +37,16 @@ const likeMessage = async (msgId) => {
     }
 }
 
-// The got retrieves a list of msg that the owner of the bot has liked
+const postPrayerRequestList = async () => {
+    const myLikeList = await getMyLikeList()
+    const prayList = filterRegexMsgList(myLikeList, prayRegex);
+    const praiseList = filterRegexMsgList(myLikeList, praiseRegex);
+    const praisepraylist = praiseList.concat(prayList)
+    await filterAndPostWeeklyList(praisepraylist); // come back
+}
+
+
+// The bot retrieves a list of msg that the owner of the bot has liked
 const getMyLikeList = async () => {
     // GET /groups/:group_id/likes/mine
     try {
@@ -76,6 +66,11 @@ const getMyLikeList = async () => {
     } catch (error) {
         console.log(error)
     }
+}
+
+// Returns a list of msg that matches the regex
+const filterRegexMsgList = (msgList, regex) => {
+    return msgList.filter(msg => (msg.text && regex.test(msg.text)))
 }
 
 // // Filter and post msg that are within the week
@@ -102,7 +97,9 @@ const filterTimeMsgList = (msgList, cutOffTime) => {
     )
 }
 
-// Returns a list of posts that mees the character count requirement
+// need to add in praise logic to split on
+
+// Returns a list of posts that meets the character count requirement
 const composePrayerRequestList = (msgList) => {
     let postList = [];
     let post = "";
@@ -113,13 +110,26 @@ const composePrayerRequestList = (msgList) => {
     msgList.map((msg) => {
         const userName = msg.name;
         const firstName = userName.split(" ")[0];
+        let text = "";
+        let type = "";
 
-        // Split out the first char sequence "/pray " from the user's post
+        /*
+        // Split out the first char sequence "/pray " or "/praise " from the user's post
         let text = msg.text.split("/pray ")[1];
+        */
+
+        // Split out the first char sequence "/pray " or "/praise " from the user's post
+        if(prayRegex.test(msg.text)) {
+            text = msg.text.split("/pray ")[1];
+            type = "(prayer)"
+        } else {
+            text = msg.text.split("/praise ")[1];
+            type = "(praise)"
+        }
 
         if (text) {
             // Add the author's name to the post
-            text = `${firstName} - ${text}\n\n`;
+            text = `${firstName} ${type} - ${text}\n\n`;
 
             // If text meets the char requirement, append to post
             if ((text.length + post.length) < 1000) {
@@ -143,11 +153,13 @@ const composePrayerRequestList = (msgList) => {
     })
 
     if (post) {
+        postList.sort();
         postList.push(post);
     }
 
     return postList;
 }
+
 
 // Split the msg into a list of msg under that is 999 len long
 const splitInto1000CharList = (msg) => {
@@ -176,16 +188,26 @@ const postMsgList = async (msgList) => {
     }
 }
 
-const postPrayerRequestList = async () => {
-    const myLikeList = await getMyLikeList()
-    const prayList = filterRegexMsgList(myLikeList, prayRegex);
-    await filterAndPostWeeklyList(prayList);
+
+// Tell the bot to create a post within its group
+const createPost = async (message) => {
+    console.log(`Creating new post (${message.length}): ${message}`);
+    const postPath = "/v3/bots/post";
+    const destUrl = new URL(postPath, baseUrl);
+
+    const response = await got.post(destUrl, {
+        json: {
+            "bot_id": botID,
+            "text": String(message),
+        },
+    })
+
+    const statusCode = response.statusCode;
+    if (statusCode !== 201) {
+        console.log(`Error creating a post ${statusCode}`);
+    }
 }
 
-// Returns a list of msg that matches the regex
-const filterRegexMsgList = (msgList, regex) => {
-    return msgList.filter(msg => (msg.text && regex.test(msg.text)))
-}
 
 // Returns all your bots and their info
 const getBots = async () => {
@@ -198,9 +220,11 @@ const getBots = async () => {
 }
 
 const prayRegex = /^(\s)*\/pray/;
+const praiseRegex = /^(\s)*\/praise/;
 const genListRegex = /^(\s)*\/list/;
 const coolRegex = /^(\s)*\/cool/;
 
+exports.praiseRegex = praiseRegex;
 exports.prayRegex = prayRegex;
 exports.coolRegex = coolRegex;
 exports.genListRegex = genListRegex;
