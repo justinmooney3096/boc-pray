@@ -48,7 +48,7 @@ const respond = async (req, res) => {
       res.end();
     }
   } catch (error) {
-    createPost("Mr. Stark I don't feel so good :(");
+    //createPost("Mr. Stark I don't feel so good :(");
     console.log(error);
   }
 }
