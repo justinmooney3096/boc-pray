@@ -17,8 +17,10 @@ const sleep = (ms) => {
 const respond = async (req, res) => {
   try {
     const request = req.body;
+    console.log("Request: ");
     console.log(request);
     const requestText = request.text;
+    console.log("requestText:");
     console.log(requestText);
     console.log(`User request: "${requestText}"`);
 
