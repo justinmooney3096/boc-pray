@@ -1,5 +1,6 @@
 const cool = require('cool-ascii-faces');
 const {
+  praiseRegex, //Justin
   prayRegex,
   coolRegex,
   genListRegex,
@@ -24,13 +25,14 @@ const respond = async (req, res) => {
       res.writeHead(200);
       // Add a quick delay so group me sends msg to server first instead of bot
       await sleep(1500);
-      if (prayRegex.test(requestText)) {
+      if (prayRegex.test(requestText) || praiseRegex.test(requestText)) {
         const msgId = request.id;
         if (!msgId) {
           console.log("Message id is undefined");
         }
         msgId && await likeMessage(msgId);
-      } else if (genListRegex.test(requestText)) {
+      } 
+      else if (genListRegex.test(requestText)) {
         await postPrayerRequestList();
       } else if (coolRegex.test(requestText)) {
         await createCoolFaceMessage();
