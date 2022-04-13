@@ -4,6 +4,8 @@ const {
   prayRegex,
   coolRegex,
   genListRegex,
+  sheetRegex,
+  sheetID,
   createPost,
   likeMessage,
   postPrayerRequestList
@@ -31,12 +33,15 @@ const respond = async (req, res) => {
           console.log("Message id is undefined");
         }
         msgId && await likeMessage(msgId);
-      } 
+      }
       else if (genListRegex.test(requestText)) {
         await postPrayerRequestList();
       } else if (coolRegex.test(requestText)) {
         await createCoolFaceMessage();
-      } else {
+      } else if (sheetRegex.test(requestText)) {
+        await createPost(sheetID);
+      }
+      else {
         console.log("Just chilling... doing nothing...");
       }
       res.end();

@@ -15,6 +15,9 @@ const accessToken = process.env.ACCESS_TOKEN;
 // The groupId is used with the accessToken for the bot to like posts on behalf of the owner
 const groupId = process.env.GROUP_ID;
 
+// Need the link to the dinner sheet
+const sheetID = process.env.SHEET_ID;
+
 if (!accessToken) {
     console.log("ENV: 'ACCESS_TOKEN' is undefined");
 }
@@ -144,7 +147,7 @@ const composePrayerRequestList = (msgList) => {
                 // Cache the last element
                 const lastElement = splitMsgList.pop();
 
-                // Push the remainder into 
+                // Push the remainder into
                 postList.push(...splitMsgList);
                 post = "";
                 post += lastElement;
@@ -223,6 +226,7 @@ const prayRegex = /^(\s)*\/pray/;
 const praiseRegex = /^(\s)*\/praise/;
 const genListRegex = /^(\s)*\/list/;
 const coolRegex = /^(\s)*\/cool/;
+const sheetRegex = /^(\s)*\/sheet/;
 
 exports.praiseRegex = praiseRegex;
 exports.prayRegex = prayRegex;
@@ -236,3 +240,5 @@ exports.filterMsgList = filterRegexMsgList;
 exports.postPrayerRequestList = postPrayerRequestList;
 exports.filterAndPostWeeklyList = filterAndPostWeeklyList;
 exports.composePrayerRequestList = composePrayerRequestList;
+exports.sheetRegex = sheetRegex;
+exports.sheetID = sheetID;
