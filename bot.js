@@ -43,7 +43,7 @@ const respond = async (req, res) => {
       } else if (helpregex.test(requesttext)) {
         await createPost(helptext)
       } else if (everyoneregex.test(requesttext)) {
-          adminarr = await getAdmins()
+          let adminarr = await getAdmins()
           if (adminarr.indexOf(senderid) > -1) {
             await createMention(requesttext)
           }
