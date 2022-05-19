@@ -63,7 +63,6 @@ const respond = async (req, res) => {
       res.writeHead(200)
       res.end()
     }
-  }
   } catch (error) {
     console.log(error)
   }
