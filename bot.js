@@ -50,20 +50,20 @@ const respond = async (req, res) => {
           else {
             console.log(`${sendername} attempted to mention everybody`)
           }
-
         }
-      }
       else {
         console.log("Just chilling... doing nothing...")
       }
       res.end()
     }
+
     // Does not match regex
     else {
       console.log("Don't care")
       res.writeHead(200)
       res.end()
     }
+  }
   } catch (error) {
     console.log(error)
   }
